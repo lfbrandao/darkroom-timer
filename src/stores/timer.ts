@@ -103,13 +103,18 @@ function createTimer() {
                 index === state.currentStepIndex ? { ...step, completed: true } : step
               );
               
+              // Clear interval to pause timer
+              clearInterval(interval!);
+              wakeLockManager.releaseWakeLock();
+              
               return {
                 ...state,
                 steps: newSteps,
                 currentStepIndex: nextIndex,
                 timeRemaining: state.steps[nextIndex].duration,
                 showAgitation: false,
-                agitationTimeRemaining: 0
+                agitationTimeRemaining: 0,
+                isRunning: false // Pause timer when moving to next step
               };
             } else {
               // All steps complete

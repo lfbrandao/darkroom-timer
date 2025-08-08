@@ -72,7 +72,7 @@
       </button>
 
       <button 
-        class="play-btn {$timer.showAgitation ? 'agitating' : ''}"
+        class="play-btn"
         disabled={$isCompleted}
         on:click={() => $timer.isRunning ? timer.pause() : timer.start()}
       >
@@ -227,16 +227,6 @@
     background: var(--muted);
     color: var(--muted-foreground);
     box-shadow: none;
-  }
-
-  .play-btn.agitating {
-    animation: pulse 1s infinite;
-    background: var(--destructive);
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
   }
 
   .user-controls {
