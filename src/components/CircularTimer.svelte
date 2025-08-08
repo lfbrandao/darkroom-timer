@@ -2,9 +2,11 @@
   export let totalTime: number;
   export let currentTime: number;
   export let showAgitation: boolean;
+  export let isRunning: boolean = true;
 
   $: progress = totalTime > 0 ? (totalTime - currentTime) / totalTime : 0;
   $: displayTime = formatTime(currentTime);
+  $: shouldAnimateAgitation = showAgitation && isRunning;
 
   function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
@@ -13,7 +15,7 @@
   }
 </script>
 
-<div class="circular-timer {showAgitation ? 'agitating' : ''}">
+<div class="circular-timer {shouldAnimateAgitation ? 'agitating' : ''}">
   <svg class="timer-svg" viewBox="0 0 200 200">
     <!-- Background circle -->
     <circle
@@ -44,7 +46,7 @@
   <div class="timer-content">
     <div class="time-display">{displayTime}</div>
     {#if showAgitation}
-      <div class="agitate-text">AGITATE</div>
+      <div class="agitate-text {shouldAnimateAgitation ? 'pulsing' : ''}">AGITATE</div>
     {/if}
   </div>
 </div>
@@ -95,9 +97,12 @@
     font-size: 1rem;
     font-weight: 700;
     color: var(--destructive);
-    animation: pulse 1s infinite;
     text-transform: uppercase;
     letter-spacing: 1px;
+  }
+
+  .agitate-text.pulsing {
+    animation: pulse 1s infinite;
   }
 
   @keyframes pulse {

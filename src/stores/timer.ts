@@ -209,6 +209,25 @@ function createTimer() {
         }
         return state;
       });
+    },
+
+    updateStepDuration: (stepIndex: number, newDuration: number) => {
+      update(state => {
+        const newSteps = state.steps.map((step, index) => 
+          index === stepIndex ? { ...step, duration: newDuration } : step
+        );
+        
+        // If updating the current step, also update timeRemaining
+        const timeRemaining = stepIndex === state.currentStepIndex 
+          ? newDuration 
+          : state.timeRemaining;
+        
+        return {
+          ...state,
+          steps: newSteps,
+          timeRemaining
+        };
+      });
     }
   };
 }

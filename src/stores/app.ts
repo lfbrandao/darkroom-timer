@@ -8,6 +8,7 @@ export interface Step {
   initialAgitation?: number;
   agitationInterval?: number;
   agitationDuration?: number;
+  dilution?: string;
 }
 
 export interface Recipe {
@@ -15,14 +16,13 @@ export interface Recipe {
   name: string;
   description?: string;
   steps: Step[];
-  createdAt: number;
 }
 
-// Load recipes from JSON file
-const RECIPES: Recipe[] = recipesData;
+// Load the single recipe from JSON file
+const RECIPE_DATA: Recipe = recipesData;
 
 export type Screen = 'timer' | 'calculator' | 'recipes';
 
 export const currentScreen = writable<Screen>('timer');
-export const recipes = writable<Recipe[]>(RECIPES);
-export const selectedRecipe = writable<Recipe>(RECIPES[0]);
+export const recipe = writable<Recipe>(RECIPE_DATA);
+export const selectedRecipe = writable<Recipe>(RECIPE_DATA);
