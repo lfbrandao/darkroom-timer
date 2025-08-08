@@ -42,10 +42,9 @@
   </svg>
   
   <div class="timer-content">
+    <div class="time-display">{displayTime}</div>
     {#if showAgitation}
       <div class="agitate-text">AGITATE</div>
-    {:else}
-      <div class="time-display">{displayTime}</div>
     {/if}
   </div>
 </div>
@@ -89,13 +88,16 @@
     font-size: 2rem;
     font-weight: 600;
     color: var(--foreground);
+    margin-bottom: 0.25rem;
   }
 
   .agitate-text {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--destructive);
     animation: pulse 1s infinite;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   @keyframes pulse {

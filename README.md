@@ -53,7 +53,7 @@ The built files will be in the `dist` directory.
 - Choose from curated professional development recipes
 - Preset recipes for common developers (Rodinal, D-76, HC-110)
 - Each recipe includes proper agitation patterns and timing
-- Recipes are defined in `src/stores/app.ts`
+- Recipes are defined in `src/lib/recipes.json`
 
 ### Chemistry Calculator
 - Enter dilution ratio (e.g., 1:25) and total volume
@@ -67,6 +67,7 @@ The built files will be in the `dist` directory.
 - `/src/routes` - SvelteKit pages and layouts
 - `/src/components` - Svelte components  
 - `/src/stores` - Svelte stores for state management
+- `/src/lib` - Shared utilities and data (recipes.json)
 - `/src/styles` - Component-specific CSS
 - `/static` - Static assets (favicon, etc.)
 - `src/globals.css` - Global CSS and Tailwind configuration

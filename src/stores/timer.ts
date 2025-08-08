@@ -1,5 +1,7 @@
 import { writable, derived } from 'svelte/store';
 import type { Step, Recipe } from './app';
+import { soundUtils } from '$lib/soundUtils';
+import { wakeLockManager } from '$lib/wakeLock';
 
 interface TimerState {
   steps: Step[];
@@ -67,28 +69,6 @@ function createTimer() {
     return 0;
   };
 
-  const playSound = (frequency: number, duration: number) => {
-    try {
-      const audioContext = new AudioContext();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.value = frequency;
-      oscillator.type = 'sine';
-      
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-      
-      oscillator.start();
-      oscillator.stop(audioContext.currentTime + duration);
-    } catch (error) {
-      console.warn('Could not play sound');
-    }
-  };
-
   return {
     subscribe,
     
@@ -107,11 +87,14 @@ function createTimer() {
     start: () => {
       update(state => ({ ...state, isRunning: true }));
       
+      // Request wake lock to prevent screen from sleeping
+      wakeLockManager.requestWakeLock();
+      
       interval = setInterval(() => {
         update(state => {
           if (state.timeRemaining <= 1) {
             // Play completion sound
-            playSound(800, 0.2);
+            soundUtils.playComplete();
             
             // Move to next step
             const nextIndex = state.currentStepIndex + 1;
@@ -130,8 +113,9 @@ function createTimer() {
               };
             } else {
               // All steps complete
-              playSound(1000, 0.5);
+              soundUtils.playGong();
               clearInterval(interval!);
+              wakeLockManager.releaseWakeLock(); // Release wake lock when timer completes
               return {
                 ...state,
                 isRunning: false,
@@ -147,9 +131,11 @@ function createTimer() {
           const elapsed = (currentStep?.duration || 0) - state.timeRemaining;
           const shouldShow = shouldAgitate(currentStep, elapsed);
           
-          // Play agitation sound when starting
+          // Play agitation sounds when starting or stopping
           if (shouldShow && !previousAgitationState) {
-            playSound(600, 0.1);
+            soundUtils.playBell(); // Start agitation
+          } else if (!shouldShow && previousAgitationState) {
+            soundUtils.playBell(); // Stop agitation
           }
           previousAgitationState = shouldShow;
 
@@ -165,11 +151,13 @@ function createTimer() {
 
     pause: () => {
       if (interval) clearInterval(interval);
+      wakeLockManager.releaseWakeLock(); // Release wake lock when paused
       update(state => ({ ...state, isRunning: false }));
     },
 
     reset: () => {
       if (interval) clearInterval(interval);
+      wakeLockManager.releaseWakeLock(); // Release wake lock when reset
       update(state => ({
         ...state,
         currentStepIndex: 0,
