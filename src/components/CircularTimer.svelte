@@ -1,7 +1,6 @@
 <script lang="ts">
   export let totalTime: number;
   export let currentTime: number;
-  export let isRunning: boolean;
   export let showAgitation: boolean;
 
   $: progress = totalTime > 0 ? (totalTime - currentTime) / totalTime : 0;

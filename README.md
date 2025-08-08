@@ -53,7 +53,7 @@ The built files will be in the `dist` directory.
 - Choose from curated professional development recipes
 - Preset recipes for common developers (Rodinal, D-76, HC-110)
 - Each recipe includes proper agitation patterns and timing
-- Recipes are defined in `src/data/recipes.json`
+- Recipes are defined in `src/stores/app.ts`
 
 ### Chemistry Calculator
 - Enter dilution ratio (e.g., 1:25) and total volume
@@ -64,18 +64,32 @@ The built files will be in the `dist` directory.
 
 ### Project Structure
 
-- `/src/components` - Svelte components
+- `/src/routes` - SvelteKit pages and layouts
+- `/src/components` - Svelte components  
 - `/src/stores` - Svelte stores for state management
 - `/src/styles` - Component-specific CSS
-- `/styles` - Global CSS and Tailwind configuration
-- `src/App.svelte` - Main application component
+- `/static` - Static assets (favicon, etc.)
+- `src/globals.css` - Global CSS and Tailwind configuration
+- `src/app.html` - Main HTML template
 
 ### Technologies
 
-- Svelte 5 + TypeScript
+- SvelteKit + Svelte 5 + TypeScript
 - Tailwind CSS v4
 - Vite 7
 - Lucide Svelte icons
+- GitHub Pages deployment
+
+## Deployment
+
+This app is automatically deployed to GitHub Pages using GitHub Actions. When you push to the main branch, the app will be built and deployed.
+
+### GitHub Pages Setup
+
+1. Go to your repository settings
+2. Navigate to Pages section
+3. Set Source to "GitHub Actions"
+4. The app will be available at `https://yourusername.github.io/darkroom-timer-svelte/`
 
 ## License
 

@@ -2,8 +2,7 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    './index.html',
-    './src/**/*.{svelte,js,ts}',
+    './src/**/*.{svelte,js,ts,html}',
   ],
   theme: {
     extend: {},

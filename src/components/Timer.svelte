@@ -77,7 +77,6 @@
     <CircularTimer 
       totalTime={$totalTime}
       currentTime={$timer.timeRemaining}
-      isRunning={$timer.isRunning}
       showAgitation={$timer.showAgitation}
     />
 
@@ -242,7 +241,7 @@
     box-shadow: 0 0 0 3px var(--primary-alpha);
   }
 
-  .select-icon {
+  :global(.select-icon) {
     position: absolute;
     right: 12px;
     color: var(--text-secondary);
@@ -250,7 +249,7 @@
     transition: transform 0.2s ease;
   }
 
-  .recipe-select:focus + .select-icon {
+  .select-wrapper:focus-within :global(.select-icon) {
     transform: rotate(180deg);
   }  .controls {
     display: flex;
