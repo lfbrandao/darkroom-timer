@@ -122,14 +122,6 @@ temp/
 ehthumbs.db
 Thumbs.db
 
-# Package managers
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-
-# Optional: Uncomment if you want to ignore lock files
-# Keeping package-lock.json is generally recommended for consistency
-# package-lock.json
 
 # Local development
 .env.local
