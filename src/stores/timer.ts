@@ -27,45 +27,70 @@ function createTimer() {
   let previousAgitationState = false;
 
   const shouldAgitate = (step: Step, elapsed: number): boolean => {
-    if (!step.initialAgitation && !step.agitationInterval) return false;
-    
-    if (step.initialAgitation && elapsed < step.initialAgitation) {
+    const hasInitial = typeof step.initialAgitation === 'number';
+    const hasInterval = typeof step.agitationInterval === 'number' && typeof step.agitationDuration === 'number';
+    const hasContinuous = typeof step.agitationDuration === 'number' && !hasInitial && !step.agitationInterval;
+
+    // Continuous agitation for entire step if only agitationDuration is provided
+    if (hasContinuous) return true;
+
+    // Initial agitation window at start of step
+    if (hasInitial && elapsed < (step.initialAgitation as number)) {
       return true;
     }
-    
-    if (step.agitationInterval && step.agitationDuration && step.initialAgitation) {
-      const firstIntervalStart = step.initialAgitation + step.agitationInterval;
-      
-      if (elapsed >= firstIntervalStart) {
-        const timeFromFirstInterval = elapsed - firstIntervalStart;
-        const intervalPosition = timeFromFirstInterval % step.agitationInterval;
-        return intervalPosition < step.agitationDuration;
+
+    // Interval agitation
+    if (hasInterval) {
+      if (hasInitial) {
+        const firstIntervalStart = (step.initialAgitation as number) + (step.agitationInterval as number);
+        if (elapsed >= firstIntervalStart) {
+          const timeFromFirstInterval = elapsed - firstIntervalStart;
+          const intervalPosition = timeFromFirstInterval % (step.agitationInterval as number);
+          return intervalPosition < (step.agitationDuration as number);
+        }
+      } else {
+        // No initial agitation defined: start intervals immediately
+        const intervalPosition = elapsed % (step.agitationInterval as number);
+        return intervalPosition < (step.agitationDuration as number);
       }
     }
-    
+
     return false;
   };
 
   const getAgitationTimeRemaining = (step: Step, elapsed: number): number => {
     if (!shouldAgitate(step, elapsed)) return 0;
-    
-    if (step.initialAgitation && elapsed < step.initialAgitation) {
-      return step.initialAgitation - elapsed;
+
+    const hasInitial = typeof step.initialAgitation === 'number';
+    const hasInterval = typeof step.agitationInterval === 'number' && typeof step.agitationDuration === 'number';
+    const hasContinuous = typeof step.agitationDuration === 'number' && !hasInitial && !step.agitationInterval;
+
+    if (hasContinuous) {
+      return Math.max(0, step.duration - elapsed);
     }
-    
-    if (step.agitationInterval && step.agitationDuration && step.initialAgitation) {
-      const firstIntervalStart = step.initialAgitation + step.agitationInterval;
-      
-      if (elapsed >= firstIntervalStart) {
-        const timeFromFirstInterval = elapsed - firstIntervalStart;
-        const intervalPosition = timeFromFirstInterval % step.agitationInterval;
-        
-        if (intervalPosition < step.agitationDuration) {
-          return step.agitationDuration - intervalPosition;
+
+    if (hasInitial && elapsed < (step.initialAgitation as number)) {
+      return (step.initialAgitation as number) - elapsed;
+    }
+
+    if (hasInterval) {
+      if (hasInitial) {
+        const firstIntervalStart = (step.initialAgitation as number) + (step.agitationInterval as number);
+        if (elapsed >= firstIntervalStart) {
+          const timeFromFirstInterval = elapsed - firstIntervalStart;
+          const intervalPosition = timeFromFirstInterval % (step.agitationInterval as number);
+          if (intervalPosition < (step.agitationDuration as number)) {
+            return (step.agitationDuration as number) - intervalPosition;
+          }
+        }
+      } else {
+        const intervalPosition = elapsed % (step.agitationInterval as number);
+        if (intervalPosition < (step.agitationDuration as number)) {
+          return (step.agitationDuration as number) - intervalPosition;
         }
       }
     }
-    
+
     return 0;
   };
 

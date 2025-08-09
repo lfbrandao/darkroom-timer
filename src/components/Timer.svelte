@@ -1,10 +1,8 @@
 <script lang="ts">
   import { timer, currentStep, totalTime, elapsedTime, isCompleted } from '../stores/timer';
-  import { recipe } from '../stores/app';
   import { Play, Pause, RotateCcw, SkipBack, SkipForward } from 'lucide-svelte';
   import CircularTimer from './CircularTimer.svelte';
   import StepsList from './StepsList.svelte';
-  import { onMount } from 'svelte';
 
   let developerTime = 480; // 8 minutes in seconds
   let totalSolution = 500; // 500ml
@@ -12,18 +10,17 @@
   $: canSkipForward = $timer.currentStepIndex < $timer.steps.length - 1 && !$isCompleted;
   $: canSkipBackward = $timer.currentStepIndex > 0;
 
-  onMount(() => {
-    // Load the single recipe and apply initial developer time
-    timer.loadRecipe($recipe);
-    updateDeveloperTime();
-  });
-
   const updateDeveloperTime = () => {
     if ($timer.isRunning) return;
     
     // Update the first step (developer) duration
     timer.updateStepDuration(0, developerTime);
   };
+
+  // Keep developer time in sync once steps are loaded by layout
+  $: if ($timer.steps.length > 0 && !$timer.isRunning) {
+    timer.updateStepDuration(0, developerTime);
+  }
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -233,11 +230,12 @@
     display: flex;
     gap: 1.5rem;
     align-items: flex-end;
+    flex-wrap: wrap; /* allow wrapping on narrow widths */
     padding: 1.5rem;
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    max-width: 400px;
+    max-width: 640px; /* give enough room for two controls side-by-side */
     width: 100%;
   }
 
@@ -245,7 +243,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    flex: 1;
+    flex: 1 1 260px; /* grow, shrink, base width */
+    min-width: 200px; /* prevent overly small inputs */
   }
 
   .control-group label {
@@ -281,13 +280,15 @@
   }
 
   .solution-input input {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0; /* allow shrinking in flex container */
   }
 
   .unit {
     font-size: 0.9rem;
     color: var(--muted-foreground);
     font-weight: 500;
+    white-space: nowrap;
   }
 
   .steps-section {
@@ -295,6 +296,32 @@
     background: var(--secondary);
     overflow-y: auto;
     min-height: 0; /* Allow flex child to shrink */
+  }
+
+  /* Mobile: keep both controls side-by-side, reduce spacing */
+  @media (max-width: 480px) {
+    .user-controls {
+      gap: 0.75rem;
+      padding: 1rem;
+    }
+
+    .control-group {
+      flex: 1 1 48%;
+      min-width: 0; /* allow two-up on very small screens */
+    }
+
+    .control-group label {
+      font-size: 0.8rem;
+    }
+
+    .control-group input {
+      padding: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .solution-input {
+      gap: 0.25rem;
+    }
   }
 
   .completion {

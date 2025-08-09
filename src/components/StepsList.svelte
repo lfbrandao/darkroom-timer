@@ -67,13 +67,16 @@
             </div>
           {/if}
           
-          {#if step.initialAgitation || step.agitationInterval}
+          {#if step.initialAgitation || (step.agitationInterval && step.agitationDuration) || (step.agitationDuration && !step.initialAgitation && !step.agitationInterval)}
             <div class="agitation-info">
               {#if step.initialAgitation}
                 Initial: {step.initialAgitation}s
               {/if}
               {#if step.agitationInterval && step.agitationDuration}
                 • Every {step.agitationInterval}s for {step.agitationDuration}s
+              {/if}
+              {#if step.agitationDuration && !step.initialAgitation && !step.agitationInterval}
+                • Continuous agitation
               {/if}
             </div>
           {/if}
