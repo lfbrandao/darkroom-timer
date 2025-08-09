@@ -1,0 +1,37 @@
+{
+  "id": "darkroom-process",
+  "name": "Darkroom Development Process",
+  "description": "Standard darkroom development process",
+  "steps": [
+    {
+      "name": "Developer",
+      "duration": 480,
+      "completed": false,
+      "initialAgitation": 30,
+      "agitationInterval": 30,
+      "agitationDuration": 5,
+      "dilution": "1:25"
+    },
+    {
+      "name": "Stop Bath",
+      "duration": 60,
+      "completed": false,
+      "agitationDuration": 60,
+      "dilution": "1:20"
+    },
+    {
+      "name": "Fixer",
+      "duration": 300,
+      "completed": false,
+      "initialAgitation": 15,
+      "agitationInterval": 60,
+      "agitationDuration": 10,
+      "dilution": "1:4"
+    },
+    {
+      "name": "Final Wash",
+      "duration": 180,
+      "completed": false
+    }
+  ]
+}
