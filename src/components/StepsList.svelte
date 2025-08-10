@@ -5,6 +5,7 @@
   export let steps: Step[];
   export let currentStepIndex: number;
   export let totalSolution: number = 500; // Default 500ml
+  export let onStepSelect: (stepIndex: number) => void;
 
   function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
@@ -46,7 +47,13 @@
   
   <div class="steps">
     {#each steps as step, index}
-      <div class="step {index === currentStepIndex ? 'current' : ''} {step.completed ? 'completed' : ''}">
+      <div 
+        class="step {index === currentStepIndex ? 'current' : ''} {step.completed ? 'completed' : ''}"
+        on:click={() => onStepSelect(index)}
+        on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onStepSelect(index) : null}
+        role="button"
+        tabindex="0"
+      >
         <div class="step-indicator">
           {#if step.completed}
             <Check size={16} />
@@ -128,6 +135,19 @@
     border: 1px solid var(--border);
     border-radius: 8px;
     transition: all 0.2s;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step:hover:not(.current) {
+    background: var(--background);
+    border-color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .step:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
   }
 
   .step.current {

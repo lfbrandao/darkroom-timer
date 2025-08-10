@@ -45,6 +45,12 @@
     developerTime = parseTimeInput(target.value);
     updateDeveloperTime();
   };
+
+  const handleStepSelect = (stepIndex: number) => {
+    if ($timer.isRunning) return; // Don't allow step changes while running
+    
+    timer.jumpToStep(stepIndex);
+  };
 </script>
 
 <div class="timer-screen">
@@ -124,7 +130,12 @@
         </button>
       </div>
     {:else}
-      <StepsList steps={$timer.steps} currentStepIndex={$timer.currentStepIndex} {totalSolution} />
+      <StepsList 
+        steps={$timer.steps} 
+        currentStepIndex={$timer.currentStepIndex} 
+        {totalSolution}
+        onStepSelect={handleStepSelect}
+      />
     {/if}
   </div>
 </div>

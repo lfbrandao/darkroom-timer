@@ -4,9 +4,33 @@
   export let showAgitation: boolean;
   export let isRunning: boolean = true;
 
+  let agitationStartTime: number | null = null;
+  let agitationAnimationActive = false;
+  let animationDuration = 0;
+
   $: progress = totalTime > 0 ? (totalTime - currentTime) / totalTime : 0;
   $: displayTime = formatTime(currentTime);
   $: shouldAnimateAgitation = showAgitation && isRunning;
+
+  // Handle agitation animation timing
+  $: if (showAgitation && !agitationAnimationActive && isRunning) {
+    agitationStartTime = Date.now();
+    agitationAnimationActive = true;
+    animationDuration = 0;
+  } else if (!showAgitation || !isRunning) {
+    agitationAnimationActive = false;
+    agitationStartTime = null;
+    animationDuration = 0;
+  }
+
+  // Update animation duration when running
+  $: if (agitationAnimationActive && isRunning && agitationStartTime) {
+    animationDuration = Math.min(Date.now() - agitationStartTime, 2000);
+  }
+
+  $: agitationShakeActive = agitationAnimationActive && 
+    isRunning &&
+    animationDuration < 2000; // 2 seconds
 
   function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
@@ -15,7 +39,7 @@
   }
 </script>
 
-<div class="circular-timer {shouldAnimateAgitation ? 'agitating' : ''}">
+<div class="circular-timer {agitationShakeActive ? 'agitating' : ''}">
   <svg class="timer-svg" viewBox="0 0 200 200">
     <!-- Background circle -->
     <circle

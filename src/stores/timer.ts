@@ -258,6 +258,26 @@ function createTimer() {
           timeRemaining
         };
       });
+    },
+
+    jumpToStep: (stepIndex: number) => {
+      update(state => {
+        if (stepIndex < 0 || stepIndex >= state.steps.length) return state;
+        
+        const newSteps = state.steps.map((step, index) => ({
+          ...step,
+          completed: index < stepIndex
+        }));
+        
+        return {
+          ...state,
+          currentStepIndex: stepIndex,
+          timeRemaining: state.steps[stepIndex].duration,
+          showAgitation: false,
+          agitationTimeRemaining: 0,
+          steps: newSteps
+        };
+      });
     }
   };
 }
