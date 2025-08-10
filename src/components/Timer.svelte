@@ -1,14 +1,13 @@
 <script lang="ts">
   import { timer, currentStep, totalTime, elapsedTime, isCompleted } from '../stores/timer';
-  import { Play, Pause, RotateCcw, SkipBack, SkipForward } from 'lucide-svelte';
+  import { Play, Pause } from 'lucide-svelte';
   import CircularTimer from './CircularTimer.svelte';
   import StepsList from './StepsList.svelte';
 
   let developerTime = 480; // 8 minutes in seconds
   let totalSolution = 500; // 500ml
 
-  $: canSkipForward = $timer.currentStepIndex < $timer.steps.length - 1 && !$isCompleted;
-  $: canSkipBackward = $timer.currentStepIndex > 0;
+
 
   const updateDeveloperTime = () => {
     if ($timer.isRunning) return;
@@ -61,11 +60,10 @@
     <!-- Controls -->
     <div class="controls">
       <button 
-        class="control-btn secondary"
-        disabled={!canSkipBackward}
-        on:click={() => timer.skipToPrevious()}
+        class="control-btn cancel"
+        on:click={() => timer.reset()}
       >
-        <SkipBack size={20} />
+        Cancel
       </button>
 
       <button 
@@ -74,25 +72,10 @@
         on:click={() => $timer.isRunning ? timer.pause() : timer.start()}
       >
         {#if $timer.isRunning}
-          <Pause size={24} />
+          Pause
         {:else}
-          <Play size={24} />
+          Start
         {/if}
-      </button>
-
-      <button 
-        class="control-btn secondary"
-        disabled={!canSkipForward}
-        on:click={() => timer.skipToNext()}
-      >
-        <SkipForward size={20} />
-      </button>
-
-      <button 
-        class="control-btn reset"
-        on:click={() => timer.reset()}
-      >
-        <RotateCcw size={20} />
       </button>
     </div>
 
@@ -168,14 +151,15 @@
   .controls {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
     position: relative;
   }
 
   .control-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 24px;
     border: none;
     background: transparent;
     color: var(--primary);
@@ -184,6 +168,8 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+    font-weight: 600;
+    font-size: 0.9rem;
   }
 
   .control-btn:hover:not(:disabled) {
@@ -196,9 +182,13 @@
     cursor: not-allowed;
   }
 
-  .control-btn.reset {
-    position: absolute;
-    right: -80px;
+  .control-btn.cancel {
+    color: var(--muted-foreground);
+  }
+
+  .control-btn.cancel:hover:not(:disabled) {
+    background: var(--muted);
+    color: var(--foreground);
   }
 
   .play-btn {
