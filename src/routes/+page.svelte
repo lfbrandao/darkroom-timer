@@ -8,11 +8,11 @@
 
 <style>
   .app {
-    height: 100vh;
+    min-height: 100vh;
     background: var(--background);
     color: var(--foreground);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
   }
 </style>

@@ -151,8 +151,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100%;
+    overflow: visible;
   }
 
   .timer-section {
@@ -292,10 +292,9 @@
   }
 
   .steps-section {
-    flex: 1;
     background: var(--secondary);
-    overflow-y: auto;
-    min-height: 0; /* Allow flex child to shrink */
+    overflow: visible;
+    min-height: 0;
   }
 
   /* Mobile: keep both controls side-by-side, reduce spacing */
