@@ -9,29 +9,32 @@
 
   let agitationShakeActive = $state(false);
   let shakeTimeoutId: number | null = null;
+  let prevActive = $state(false);
 
   const progress = $derived(totalTime > 0 ? (totalTime - currentTime) / totalTime : 0);
   const displayTime = $derived(formatTime(currentTime));
   const shouldAnimateAgitation = $derived(showAgitation && isRunning);
+  const active = $derived(showAgitation && isRunning);
 
-  // Start a brief shake when agitation begins while running
+  // Trigger brief shake only when agitation becomes active, and stop on deactivate
   $effect(() => {
-    if (showAgitation && isRunning) {
-      if (!agitationShakeActive) {
-        agitationShakeActive = true;
-        if (shakeTimeoutId) clearTimeout(shakeTimeoutId);
-        shakeTimeoutId = window.setTimeout(() => {
-          agitationShakeActive = false;
-          shakeTimeoutId = null;
-        }, 2000);
-      }
-    } else {
+    const a = active;
+    if (a && !prevActive) {
+      agitationShakeActive = true;
+      if (shakeTimeoutId) clearTimeout(shakeTimeoutId);
+      shakeTimeoutId = window.setTimeout(() => {
+        agitationShakeActive = false;
+        shakeTimeoutId = null;
+      }, 2000);
+    }
+    if (!a && prevActive) {
       agitationShakeActive = false;
       if (shakeTimeoutId) {
         clearTimeout(shakeTimeoutId);
         shakeTimeoutId = null;
       }
     }
+    prevActive = a;
   });
 
   function formatTime(seconds: number): string {
