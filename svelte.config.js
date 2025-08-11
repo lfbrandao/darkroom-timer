@@ -19,7 +19,7 @@ const config = {
 		}),
 		paths: {
 			// For GitHub Pages deployment to subdirectory
-			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
+			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH || '/darkroom-timer'
 		}
 	}
 };
