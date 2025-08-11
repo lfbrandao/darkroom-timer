@@ -1,145 +1,90 @@
 @custom-variant dark (&:is(.dark *));
 
+/* CSS Variables */
 :root {
-  /* iOS System Colors - Light Mode */
-  --font-size: 17px; /* iOS base font size */
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #ffffff;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #FF3B30; /* iOS Red */
-  --primary-foreground: #ffffff;
-  --secondary: #F2F2F7; /* iOS System Gray 6 */
-  --secondary-foreground: #000000;
-  --muted: #F2F2F7;
-  --muted-foreground: #8E8E93; /* iOS System Gray 2 */
-  --accent: #F2F2F7;
-  --accent-foreground: #000000;
-  --destructive: #FF3B30; /* iOS Red */
-  --destructive-foreground: #ffffff;
-  --border: #C6C6C8; /* iOS System Gray 4 */
-  --input: transparent;
-  --input-background: #F2F2F7;
-  --switch-background: #E5E5EA;
-  --font-weight-medium: 600; /* iOS Medium */
-  --font-weight-normal: 400; /* iOS Regular */
-  --font-weight-semibold: 600;
-  --ring: #FF3B30;
-  --chart-1: #FF3B30;
-  --chart-2: #34C759; /* iOS Green */
-  --chart-3: #FF9500; /* iOS Orange */
-  --chart-4: #AF52DE; /* iOS Purple */
-  --chart-5: #FF2D92; /* iOS Pink */
-  --radius: 12px; /* iOS corner radius */
-  --sidebar: #F2F2F7;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #FF3B30;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #E5E5EA;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #C6C6C8;
-  --sidebar-ring: #FF3B30;
-  
-  /* iOS Typography Scale */
-  --text-xs: 12px;
-  --text-sm: 14px;
-  --text-base: 17px;
-  --text-lg: 20px;
-  --text-xl: 28px;
-  --text-2xl: 34px;
-  --text-3xl: 40px;
-}
-
-.dark {
-  /* iOS System Colors - Dark Mode */
   --background: #000000;
   --foreground: #ffffff;
-  --card: #1C1C1E; /* iOS System Gray 6 Dark */
+  --card: #1a1a1a;
   --card-foreground: #ffffff;
-  --popover: #1C1C1E;
+  --popover: #1a1a1a;
   --popover-foreground: #ffffff;
-  --primary: #FF453A; /* iOS Red Dark */
+  --primary: #ff3b30;
   --primary-foreground: #ffffff;
-  --secondary: #1C1C1E;
+  --secondary: #1c1c1e;
   --secondary-foreground: #ffffff;
-  --muted: #2C2C2E; /* iOS System Gray 5 Dark */
-  --muted-foreground: #8E8E93; /* iOS System Gray 2 Dark */
-  --accent: #2C2C2E;
+  --muted: #2c2c2e;
+  --muted-foreground: #8e8e93;
+  --accent: #2c2c2e;
   --accent-foreground: #ffffff;
-  --destructive: #FF453A; /* iOS Red Dark */
+  --destructive: #ff453a;
   --destructive-foreground: #ffffff;
-  --border: #38383A; /* iOS System Gray 4 Dark */
-  --input: #1C1C1E;
-  --input-background: #2C2C2E;
-  --switch-background: #39393D;
-  --ring: #FF453A;
-  --chart-1: #FF453A;
-  --chart-2: #32D74B; /* iOS Green Dark */
-  --chart-3: #FF9F0A; /* iOS Orange Dark */
-  --chart-4: #BF5AF2; /* iOS Purple Dark */
-  --chart-5: #FF375F; /* iOS Pink Dark */
-  --sidebar: #1C1C1E;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #FF453A;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2C2C2E;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #38383A;
-  --sidebar-ring: #FF453A;
+  --border: #38383a;
+  --input: #1c1c1e;
+  --ring: #ff3b30;
+  --chart-1: #ff3b30;
+  --chart-2: #ff9500;
+  --chart-3: #ffcc02;
+  --chart-4: #30d158;
+  --chart-5: #007aff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: 8px;
-  --radius-md: 10px;
-  --radius-lg: var(--radius);
-  --radius-xl: 16px;
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
+/* Mobile fullscreen and safe area handling */
+@supports (padding: max(0px)) {
   body {
-    @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
   }
+}
+
+/* Ensure full height on mobile */
+html, body {
+  height: 100%;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  overflow: hidden;
+}
+
+/* Prevent zoom on input focus on iOS */
+input[type="text"], input[type="number"] {
+  font-size: 16px;
+}
+
+/* Hide scrollbars but keep functionality */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.5;
+}
+
+/* Ensure the app takes full screen on mobile */
+#svelte {
+  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 /**
