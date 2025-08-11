@@ -1,11 +1,14 @@
+<svelte:options runes={true} />
 <script lang="ts">
   import type { Step } from '../stores/app';
   import { Check } from 'lucide-svelte';
 
-  export let steps: Step[];
-  export let currentStepIndex: number;
-  export let totalSolution: number = 500; // Default 500ml
-  export let onStepSelect: (stepIndex: number) => void;
+  const { steps, currentStepIndex, totalSolution = 500, onStepSelect } = $props<{
+    steps: Step[];
+    currentStepIndex: number;
+    totalSolution?: number;
+    onStepSelect: (stepIndex: number) => void;
+  }>();
 
   function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
@@ -49,8 +52,8 @@
     {#each steps as step, index}
       <div 
         class="step {index === currentStepIndex ? 'current' : ''} {step.completed ? 'completed' : ''}"
-        on:click={() => onStepSelect(index)}
-        on:keydown={(e) => e.key === 'Enter' || e.key === ' ' ? onStepSelect(index) : null}
+        onclick={() => onStepSelect(index)}
+        onkeydown={(e) => e.key === 'Enter' || e.key === ' ' ? onStepSelect(index) : null}
         role="button"
         tabindex="0"
       >

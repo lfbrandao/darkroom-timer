@@ -1,36 +1,38 @@
+<svelte:options runes={true} />
 <script lang="ts">
-  export let totalTime: number;
-  export let currentTime: number;
-  export let showAgitation: boolean;
-  export let isRunning: boolean = true;
+  const { totalTime, currentTime, showAgitation, isRunning = true } = $props<{
+    totalTime: number;
+    currentTime: number;
+    showAgitation: boolean;
+    isRunning?: boolean;
+  }>();
 
-  let agitationStartTime: number | null = null;
-  let agitationAnimationActive = false;
-  let animationDuration = 0;
+  let agitationShakeActive = $state(false);
+  let shakeTimeoutId: number | null = null;
 
-  $: progress = totalTime > 0 ? (totalTime - currentTime) / totalTime : 0;
-  $: displayTime = formatTime(currentTime);
-  $: shouldAnimateAgitation = showAgitation && isRunning;
+  const progress = $derived(totalTime > 0 ? (totalTime - currentTime) / totalTime : 0);
+  const displayTime = $derived(formatTime(currentTime));
+  const shouldAnimateAgitation = $derived(showAgitation && isRunning);
 
-  // Handle agitation animation timing
-  $: if (showAgitation && !agitationAnimationActive && isRunning) {
-    agitationStartTime = Date.now();
-    agitationAnimationActive = true;
-    animationDuration = 0;
-  } else if (!showAgitation || !isRunning) {
-    agitationAnimationActive = false;
-    agitationStartTime = null;
-    animationDuration = 0;
-  }
-
-  // Update animation duration when running
-  $: if (agitationAnimationActive && isRunning && agitationStartTime) {
-    animationDuration = Math.min(Date.now() - agitationStartTime, 2000);
-  }
-
-  $: agitationShakeActive = agitationAnimationActive && 
-    isRunning &&
-    animationDuration < 2000; // 2 seconds
+  // Start a brief shake when agitation begins while running
+  $effect(() => {
+    if (showAgitation && isRunning) {
+      if (!agitationShakeActive) {
+        agitationShakeActive = true;
+        if (shakeTimeoutId) clearTimeout(shakeTimeoutId);
+        shakeTimeoutId = window.setTimeout(() => {
+          agitationShakeActive = false;
+          shakeTimeoutId = null;
+        }, 2000);
+      }
+    } else {
+      agitationShakeActive = false;
+      if (shakeTimeoutId) {
+        clearTimeout(shakeTimeoutId);
+        shakeTimeoutId = null;
+      }
+    }
+  });
 
   function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);

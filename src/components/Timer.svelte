@@ -1,17 +1,43 @@
+<svelte:options runes={true} />
 <script lang="ts">
-  import { timer, currentStep, totalTime, elapsedTime, isCompleted } from '../stores/timer';
+  import { timer, totalTime, isCompleted } from '../stores/timer';
   import { Play, Pause } from 'lucide-svelte';
   import CircularTimer from './CircularTimer.svelte';
   import StepsList from './StepsList.svelte';
+  import { mirrorStore, mirrorStores } from '$lib/runes';
 
-  let developerTime = 480; // 8 minutes in seconds
-  let totalSolution = 500; // 500ml
+  // Local mirror of timer store for runes mode
+  let t = $state({
+    steps: [] as any[],
+    currentStepIndex: 0,
+    timeRemaining: 0,
+    isRunning: false,
+    showAgitation: false
+  });
+  let totalTimeVal = $state(0);
+  let isCompletedVal = $state(false);
 
+  // keep local state in sync with stores
+  $effect(() => {
+    const unsubs = [
+      mirrorStore(timer, (val) => {
+        t.steps = val.steps;
+        t.currentStepIndex = val.currentStepIndex;
+        t.timeRemaining = val.timeRemaining;
+        t.isRunning = val.isRunning;
+        t.showAgitation = val.showAgitation;
+      }),
+      mirrorStore(totalTime, (v) => { totalTimeVal = v; }),
+      mirrorStore(isCompleted, (v) => { isCompletedVal = v; })
+    ];
+    return mirrorStores(unsubs);
+  });
 
+  let developerTime = $state(480); // 8 minutes in seconds
+  let totalSolution = $state(500); // 500ml
 
   const updateDeveloperTime = () => {
-    if ($timer.isRunning) return;
-    
+    if (t.isRunning) return;
     // Update the first step (developer) duration
     timer.updateStepDuration(0, developerTime);
   };
@@ -42,8 +68,7 @@
   };
 
   const handleStepSelect = (stepIndex: number) => {
-    if ($timer.isRunning) return; // Don't allow step changes while running
-    
+    if (t.isRunning) return; // Don't allow step changes while running
     timer.jumpToStep(stepIndex);
   };
 </script>
@@ -52,27 +77,27 @@
   <!-- Timer Display -->
   <div class="timer-section">
     <CircularTimer 
-      totalTime={$totalTime}
-      currentTime={$timer.timeRemaining}
-      showAgitation={$timer.showAgitation}
-      isRunning={$timer.isRunning}
+      totalTime={totalTimeVal}
+      currentTime={t.timeRemaining}
+      showAgitation={t.showAgitation}
+      isRunning={t.isRunning}
     />
 
     <!-- Controls -->
     <div class="controls">
       <button 
         class="control-btn cancel"
-        on:click={() => timer.reset()}
+        onclick={() => timer.reset()}
       >
         Cancel
       </button>
 
       <button 
         class="play-btn"
-        disabled={$isCompleted}
-        on:click={() => $timer.isRunning ? timer.pause() : timer.start()}
+        disabled={isCompletedVal}
+        onclick={() => t.isRunning ? timer.pause() : timer.start()}
       >
-        {#if $timer.isRunning}
+        {#if t.isRunning}
           Pause
         {:else}
           Start
@@ -88,8 +113,8 @@
           id="developer-time"
           type="text"
           value={formatTimeInput(developerTime)}
-          on:change={handleTimeChange}
-          disabled={$timer.isRunning}
+          onchange={handleTimeChange}
+          disabled={t.isRunning}
           pattern="[0-9]+:[0-5][0-9]"
           placeholder="8:00"
         />
@@ -102,7 +127,7 @@
             id="total-solution"
             type="number"
             bind:value={totalSolution}
-            disabled={$timer.isRunning}
+            disabled={t.isRunning}
             min="100"
             max="2000"
             step="50"
@@ -115,19 +140,19 @@
 
   <!-- Steps -->
   <div class="steps-section">
-    {#if $isCompleted}
+    {#if isCompletedVal}
       <div class="completion">
         <div class="completion-icon">✅</div>
         <h2>Development Complete!</h2>
         <p>All development steps have been completed successfully.</p>
-        <button class="btn primary" on:click={() => timer.reset()}>
+        <button class="btn primary" onclick={() => timer.reset()}>
           Start New Development
         </button>
       </div>
     {:else}
       <StepsList 
-        steps={$timer.steps} 
-        currentStepIndex={$timer.currentStepIndex} 
+        steps={t.steps} 
+        currentStepIndex={t.currentStepIndex} 
         {totalSolution}
         onStepSelect={handleStepSelect}
       />
