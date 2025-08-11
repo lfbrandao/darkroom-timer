@@ -21,11 +21,11 @@
     },
     {
       "name": "Fixer",
-      "duration": 300,
+      "duration": 900,
       "completed": false,
-      "initialAgitation": 15,
+      "initialAgitation": 30,
       "agitationInterval": 60,
-      "agitationDuration": 10,
+      "agitationDuration": 5,
       "dilution": "1:4"
     },
     {

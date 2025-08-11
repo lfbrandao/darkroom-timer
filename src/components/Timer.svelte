@@ -16,11 +16,6 @@
     timer.updateStepDuration(0, developerTime);
   };
 
-  // Keep developer time in sync once steps are loaded by layout
-  $: if ($timer.steps.length > 0 && !$timer.isRunning) {
-    timer.updateStepDuration(0, developerTime);
-  }
-
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
