@@ -13,7 +13,7 @@ const config = {
 			// GitHub Pages expects files in the root
 			pages: 'build',
 			assets: 'build',
-			fallback: undefined,
+			fallback: 'index.html', // Important: fallback to index.html for SPA routing
 			precompress: false,
 			strict: true
 		}),
