@@ -9,7 +9,13 @@
 
   // Load the recipe on mount
   onMount(() => {
-    timer.loadRecipe($recipe);
+    // Get the current value from the recipe store
+    const unsubscribe = recipe.subscribe((recipeValue) => {
+      timer.loadRecipe(recipeValue);
+    });
+    
+    // Clean up subscription
+    return unsubscribe;
   });
 </script>
 
