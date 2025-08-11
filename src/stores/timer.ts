@@ -98,6 +98,8 @@ function createTimer() {
     subscribe,
     
     loadRecipe: (recipe: Recipe) => {
+      // Reset agitation tracking when loading a new recipe
+      previousAgitationState = false;
       update(state => ({
         ...state,
         steps: recipe.steps.map(step => ({ ...step, completed: false })),
@@ -111,6 +113,9 @@ function createTimer() {
 
     start: () => {
       update(state => ({ ...state, isRunning: true }));
+
+      // Reset agitation tracking on (re)start so first agitation plays sound
+      previousAgitationState = false;
       
       // Request wake lock to prevent screen from sleeping
       wakeLockManager.requestWakeLock();
@@ -131,6 +136,9 @@ function createTimer() {
               // Clear interval to pause timer
               clearInterval(interval!);
               wakeLockManager.releaseWakeLock();
+
+              // Reset agitation tracking when switching steps
+              previousAgitationState = false;
               
               return {
                 ...state,
@@ -188,6 +196,7 @@ function createTimer() {
     reset: () => {
       if (interval) clearInterval(interval);
       wakeLockManager.releaseWakeLock(); // Release wake lock when reset
+      previousAgitationState = false; // Reset agitation tracking
       update(state => ({
         ...state,
         currentStepIndex: 0,
@@ -206,6 +215,9 @@ function createTimer() {
             index === state.currentStepIndex ? { ...step, completed: true } : step
           );
           const nextIndex = state.currentStepIndex + 1;
+
+          // Reset agitation tracking when switching steps
+          previousAgitationState = false;
           
           return {
             ...state,
@@ -227,6 +239,9 @@ function createTimer() {
             index === state.currentStepIndex ? { ...step, completed: false } : step
           );
           const prevIndex = state.currentStepIndex - 1;
+
+          // Reset agitation tracking when switching steps
+          previousAgitationState = false;
           
           return {
             ...state,
