@@ -2,21 +2,21 @@
   "name": "Darkroom Timer",
   "short_name": "Darkroom Timer",
   "description": "Professional darkroom timer app for film development",
-  "start_url": "/",
+  "start_url": "/darkroom-timer/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait",
-  "scope": "/",
+  "scope": "/darkroom-timer/",
   "icons": [
     {
-      "src": "/favicon.png",
+      "src": "/darkroom-timer/favicon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/favicon.png",
+      "src": "/darkroom-timer/favicon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
